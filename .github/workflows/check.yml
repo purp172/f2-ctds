@@ -1,0 +1,24 @@
+# Practical 2: on every push, run the fixed notebook from scratch on three clean machines.
+# Put this file in your repository at  .github/workflows/check.yml
+name: reproducibility-check
+on: [push]
+
+jobs:
+  run:
+    strategy:
+      fail-fast: false            # let the three jobs finish, even if one fails
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}       # login shell, so the conda environment is active
+    steps:
+      - uses: actions/checkout@v7
+      - uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest        # conda-forge only, no Anaconda terms of service prompt
+          environment-file: environment.yml
+          activate-environment: ctds       # must match "name:" in environment.yml
+      - run: conda list pandas
+      - run: jupyter nbconvert --to notebook --execute notebooks/f2_fixed.ipynb --output f2_fixed_run.ipynb

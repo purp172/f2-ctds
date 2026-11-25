@@ -1,0 +1,12 @@
+name: ctds
+channels:
+  - defaults
+dependencies:
+  - python
+  - pandas
+  - numpy
+  - matplotlib
+  - jupyterlab
+  - nbconvert
+  - ipykernel
+prefix: C:\Users\student\anaconda3\envs\ctds
